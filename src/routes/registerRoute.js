@@ -7,14 +7,12 @@ const jwt = require("jsonwebtoken");
 reg_router.post("/register", async (req, res) => {
   try {
     const isAvailable = await registerData.findOne({ email: req.body.email });
-
     if (isAvailable) {
       res.json({
         status: "failed",
         message: "user already exists",
       });
-    } else {
-      if (req.body.password === req.body.confirmpassword) {
+    } else { 
         bcrypt.hash(req.body.password, 10, async function (err, hash) {
           if (!err) {
             try {
@@ -34,12 +32,6 @@ reg_router.post("/register", async (req, res) => {
             }
           }
         });
-      } else {
-        res.status(401).json({
-          status: "failed",
-          message: "password missmatch",
-        });
-      }
     }
   } catch (e) {
     res.status(401).json({
